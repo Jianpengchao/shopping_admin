@@ -1,78 +1,91 @@
 <script setup lang="ts">
-	import { reactive } from "vue"
-	import { IconUser, IconLock } from '@arco-design/web-vue/es/icon'
-	import { ValidatedError } from '@arco-design/web-vue/es/form/interface'
+	import { reactive, ref } from "vue"
 	import { Login } from "../../../api/user"
+	import { ElNotification } from 'element-plus'
+	import type { FormInstance, FormRules } from 'element-plus'
+	import { User, Lock } from '@element-plus/icons-vue'
 
- 	interface iForm {
-    username: string;
-    password: string;
-  }
+	const loginFormRef = ref<FormInstance>()
 
-  const form = reactive<iForm>({
-    username: '',
-    password: ''
-  })
 
-	const submitLogin = async ({
-		errors,
-		values
-	}: {
-		errors: Record<string, ValidatedError> | undefined;
-		values: Record<string, string>
-	}) => {
-		if(!errors) {
-			console.log(values.username)
-			console.log(values.password)
-			
-			let res = await Login({
-				username: values.username,
-				password: values.password
-			})
-			console.log('请求返回数据：', res)
+	const loginForm = reactive<{
+		username: string;
+		password: string;
+	}>({
+		username: '',
+		password: ''
+	})
 
-		} else {
-			console.log(errors)
-		}
+	const loginRules = reactive<FormRules>({
+		username: [
+			{ required: true, message: '请输入账号', trigger: 'blur' },
+		],
+		password: [
+			{ required: true, message: '请输入密码', trigger: 'blur' },
+		]
+	})
+
+	const submitForm = async (formEl: FormInstance | undefined) => {
+		if (!formEl) return
+		await formEl.validate((valid, fields) => {
+			if (valid) {
+				Login(loginForm).then(res => {
+					console.log(res)
+					if(res.status !== 2000) {
+						ElNotification({
+							title: '温馨提示',
+							message: '登录失败！',
+							type: 'error',
+						})
+					} else {
+						ElNotification({
+							title: '温馨提示',
+							message: '登录成功！',
+							type: 'success',
+						})
+					}
+				}, fail => {
+					
+				})
+			} else {
+				console.log('error submit!', fields)
+			}
+		})
 	}
+
 
 </script>
 
 <template>
 	<div class="form-title">登 录</div>
-	<a-form :model="form" @submit="submitLogin" :style="{width:'90%'}">
-		<a-form-item 
-			field="username" 
-			label="账号"
-			:rules="[
-				{required:true,message:'请输入账号'},
-			]"
-			:validate-trigger="['change', 'blur']"
-		>
-			<a-input v-model="form.username" placeholder="请输入账号">
+	<el-form
+    ref="loginFormRef"
+    :model="loginForm"
+		:rules="loginRules"
+    class="demo-loginForm"
+  >
+		<el-form-item label="" prop="username">
+      <el-input v-model="loginForm.username" type="text" placeholder="请输入账号">
 				<template #prefix>
-					<icon-user />
-				</template>
-			</a-input>
-		</a-form-item>
-		<a-form-item
-			field="password"
-			label="密码"
-			:rules="[
-				{required:true,message:'请输入密码'},
-			]"
-			:validate-trigger="['change', 'blur']"
-		>
-			<a-input v-model="form.password" placeholder="请输入密码">
+          <el-icon class="el-input__icon"><User /></el-icon>
+        </template>
+			</el-input>
+    </el-form-item>
+
+    <el-form-item label="" prop="password">
+      <el-input v-model="loginForm.password" type="password" placeholder="请输入密码">
 				<template #prefix>
-					<icon-lock />
-				</template>
-			</a-input>
-		</a-form-item>
-		<a-form-item>
-			<a-button html-type="submit" type="primary" :style="{width: '100%'}">登录</a-button>
-		</a-form-item>
-	</a-form>
+          <el-icon class="el-input__icon"><Lock /></el-icon>
+        </template>
+			</el-input>
+    </el-form-item>
+
+    <el-form-item>
+      <el-button type="primary" style="width: 100%;" @click="submitForm(loginFormRef)">
+				登 录
+			</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 
 <style scoped lang="less">
@@ -81,5 +94,8 @@
 	font-size: 26px;
 	font-weight: 600;
 	margin-bottom: 20px;
+}
+.demo-loginForm {
+	width: 70%;
 }
 </style>
