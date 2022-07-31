@@ -1,13 +1,16 @@
 import server from "../utils/request";
 import { ILogin } from "../views/login/types";
 
-type IRegister = {
-	confirm: string
-} & ILogin
-
 /**
  * 登录
+ * @param form usernaem: string, password：string
+ * @returns promise 
  */
 export const Login = (form: ILogin) => server.post("/exemption/login", form)
 
-export const Register = (form: IRegister) => server.post("/exemption/register", form)
+/**
+ * 注册
+ * @param form usernaem: string, password：string
+ * @returns promise
+ */
+export const Register = (form: ILogin) => server.post("/exemption/register", form)

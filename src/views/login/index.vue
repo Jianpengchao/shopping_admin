@@ -15,7 +15,7 @@
   <div class="login">
     <div class="login-container">
       <div :class="['login-form', isLogin ? 'login-form' : 'register-form']">
-        <component :is="isLogin ? LoginForm : RegisterForm"></component>
+        <component :toggleMode="onToggle" :is="isLogin ? LoginForm : RegisterForm"></component>
       </div>
       <div :class="['toggle-mode', isLogin ? 'login-mode' : 'register-mode']" @click="onToggle">
         <div class="toggle-btn">{{isLogin ? '去注册' : '去登录'}}</div>

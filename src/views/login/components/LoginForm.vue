@@ -1,12 +1,13 @@
 <script setup lang="ts">
 	import { reactive, ref } from "vue"
+	import { useRoute, useRouter} from "vue-router"
 	import { Login } from "../../../api/user"
 	import { ElNotification } from 'element-plus'
 	import type { FormInstance, FormRules } from 'element-plus'
 	import { User, Lock } from '@element-plus/icons-vue'
 
 	const loginFormRef = ref<FormInstance>()
-
+	const router = useRouter();
 
 	const loginForm = reactive<{
 		username: string;
@@ -17,12 +18,8 @@
 	})
 
 	const loginRules = reactive<FormRules>({
-		username: [
-			{ required: true, message: '请输入账号', trigger: 'blur' },
-		],
-		password: [
-			{ required: true, message: '请输入密码', trigger: 'blur' },
-		]
+		username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+		password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 	})
 
 	const submitForm = async (formEl: FormInstance | undefined) => {
@@ -43,6 +40,8 @@
 							message: '登录成功！',
 							type: 'success',
 						})
+						router.push('/')
+
 					}
 				}, fail => {
 					
@@ -81,7 +80,7 @@
     </el-form-item>
 
     <el-form-item>
-      <el-button type="primary" style="width: 100%;" @click="submitForm(loginFormRef)">
+      <el-button style="width: 100%;" @click="submitForm(loginFormRef)">
 				登 录
 			</el-button>
     </el-form-item>

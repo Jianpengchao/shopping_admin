@@ -1,45 +1,138 @@
-<script setup lang="ts">
-	import { reactive } from "vue"
-	import { IconUser, IconLock } from '@arco-design/web-vue/es/icon'
-	import { ValidatedError } from '@arco-design/web-vue/es/form/interface'
 
- 	interface iForm {
-    username: string;
-    password: string;
-		confirm: string;
+<script lang="ts" setup>
+import { reactive, ref, defineProps } from 'vue'
+import { ElNotification } from 'element-plus'
+import type { FormInstance } from 'element-plus'
+import { User, Lock } from '@element-plus/icons-vue'
+import { Register } from "../../../api/user"
+import { ILogin } from '../types'
+
+const props = defineProps<{toggleMode: () => {}}>()
+
+type IRegister = {
+	checkPass: string
+} & ILogin
+
+const registerFormRef = ref<FormInstance>()
+
+
+const validatePass = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请输入密码'))
+  } else {
+    if (registerForm.checkPass !== '') {
+      if (!registerFormRef.value) return
+      registerFormRef.value.validateField('checkPass', () => null)
+    }
+    callback()
   }
+}
+const validatePass2 = (rule: any, value: any, callback: any) => {
+  if (value === '') {
+    callback(new Error('请输入密码'))
+  } else if (value !== registerForm.password) {
+    callback(new Error("密码不一致"))
+  } else {
+    callback()
+  }
+}
 
-  const form = reactive<iForm>({
-    username: '',
-    password: '',
-		confirm: '',
+
+const registerForm = reactive<IRegister>({
+	username: '',	
+  password: '',
+  checkPass: '',
+})
+
+const rules = reactive({
+	username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
+  password: [{ validator: validatePass, trigger: 'blur' }],
+  checkPass: [{ validator: validatePass2, trigger: 'blur' }],
+})
+
+const submitForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate((valid) => {
+    if (valid) {
+      Register({
+				username: registerForm.username,
+				password: registerForm.password
+			}).then(res => {
+				console.log(res)
+				if (res.status === 2000) {
+					ElNotification({
+						title: '温馨提示',
+						message: '注册成功，请登录！',
+						type: 'success',
+					})
+					props.toggleMode()
+				} else {
+					ElNotification({
+						title: '温馨提示',
+						message: '注册失败！',
+						type: 'error',
+					})
+				}
+			},
+			fail => {
+				console.log(fail)
+			})
+    } else {
+      console.log('error submit!')
+    }
   })
-	const submitRegister = ({
-		errors,
-		values
-	}: {
-		errors: Record<string, ValidatedError> | undefined;
-		values: Record<string, any>
-	}) => {
-		console.log(values.username)
-		console.log(values.password)
-		console.log(values.confirm)
-		console.log(errors)
-	}
-
+}
 
 </script>
 
 <template>
 	<div class="form-title">注 册</div>
-	
+  <el-form
+    ref="registerFormRef"
+    :model="registerForm"
+    status-icon
+    :rules="rules"
+    class="register-form"
+  >
+		<el-form-item label="" prop="username">
+      <el-input v-model="registerForm.username" type="text" placeholder="请输入账号">
+				<template #prefix>
+          <el-icon class="el-input__icon"><User /></el-icon>
+        </template>
+			</el-input>
+    </el-form-item>
+
+    <el-form-item label="" prop="password">
+      <el-input v-model="registerForm.password" type="password" placeholder="请输入密码">
+				<template #prefix>
+          <el-icon class="el-input__icon"><Lock /></el-icon>
+        </template>
+			</el-input>
+    </el-form-item>
+    <el-form-item label="" prop="checkPass">
+      <el-input v-model="registerForm.checkPass" type="password"  placeholder="请确认密码">
+				<template #prefix>
+          <el-icon class="el-input__icon"><Lock /></el-icon>
+        </template>
+			</el-input>
+    </el-form-item>
+    <el-form-item>
+      <el-button style="width: 100%;" @click="submitForm(registerFormRef)">
+				注 册
+			</el-button>
+    </el-form-item>
+  </el-form>
 </template>
 
 <style scoped lang="less">
-.form-title {
-	text-align: center;
-	font-size: 26px;
-	font-weight: 600;
-	margin-bottom: 20px;
-}
+
+	.form-title {
+		text-align: center;
+		font-size: 26px;
+		font-weight: 600;
+		margin-bottom: 20px;
+	}
+	.register-form {
+		width: 70%;
+	}
 </style>
