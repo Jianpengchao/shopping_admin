@@ -7,7 +7,7 @@ import { ref } from 'vue'
 <template>
   <div class="common-layout">
     <el-container>
-      <el-aside width="200px" class="common-layout-aside">Aside</el-aside>
+      <el-aside width="300px" class="common-layout-aside">Aside</el-aside>
       <el-container>
         <el-header class="common-layout-header">Header</el-header>
         <el-main class="common-layout-main">
