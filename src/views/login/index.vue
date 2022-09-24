@@ -35,8 +35,8 @@
   &-container {
     position: relative;
     background: rgba(220, 221, 220, 0.4);
-    width: 60%;
-    height: 60vh;
+    width: 584px;
+    height: 382px;
   }
 }
 
@@ -47,10 +47,8 @@
   transition: all 2s;
   background-color: whitesmoke;
   z-index: 333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  box-sizing: border-box;
+  padding: 30px 50px;
 }
 .login-form {
   top: 0;

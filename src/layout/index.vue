@@ -1,6 +1,19 @@
 
 <script lang="ts" setup>
+import axios from 'axios'
 import { ref } from 'vue'
+
+const getsda = () => {
+  console.log('fds')
+  axios.get('/sapi/user/gettest', {
+    params: {
+      id: ['100', '200', '300'],
+      name: '杜甫'
+    }
+  }).then(res => {
+    console.log(res.data)
+  })
+}
 
 </script>
 
@@ -12,7 +25,7 @@ import { ref } from 'vue'
         <el-header class="common-layout-header">Header</el-header>
         <el-main class="common-layout-main">
 
-          main
+          <div @click="getsda">GET Request</div>
           <router-view />
 
         </el-main>

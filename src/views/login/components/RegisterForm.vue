@@ -130,9 +130,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
 		text-align: center;
 		font-size: 26px;
 		font-weight: 600;
-		margin-bottom: 20px;
+		line-height: 100px;
 	}
 	.register-form {
-		width: 70%;
+		width: 100%;
 	}
 </style>
