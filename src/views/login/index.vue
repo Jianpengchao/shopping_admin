@@ -17,8 +17,8 @@
       <div :class="['login-form', isLogin ? 'login-form' : 'register-form']">
         <component :toggleMode="onToggle" :is="isLogin ? LoginForm : RegisterForm"></component>
       </div>
-      <div :class="['toggle-mode', isLogin ? 'login-mode' : 'register-mode']" @click="onToggle">
-        <div class="toggle-btn">{{isLogin ? '去注册' : '去登录'}}</div>
+      <div :class="['toggle-mode', isLogin ? 'login-mode' : 'register-mode']">
+        <div class="toggle-btn" @click="onToggle">{{isLogin ? '去注册' : '去登录'}}</div>
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@
   position: absolute;
   width: 62%;
   height: 100%;
-  transition: all 2s;
+  transition: all 1s;
   background-color: whitesmoke;
   z-index: 333;
   box-sizing: border-box;
