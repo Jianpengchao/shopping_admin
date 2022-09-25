@@ -1,53 +1,24 @@
-
 <script lang="ts" setup>
-import axios from 'axios'
-import { ref } from 'vue'
-
-const getsda = () => {
-  console.log('fds')
-  axios.get('/sapi/user/gettest', {
-    params: {
-      id: ['100', '200', '300'],
-      name: '杜甫'
-    }
-  }).then(res => {
-    console.log(res.data)
-  })
-}
-
+  import Aside from './components/Aside.vue'
+  import Header from './components/Header.vue';
 </script>
 
 <template>
-  <div class="common-layout">
-    <el-container>
-      <el-aside width="300px" class="common-layout-aside">Aside</el-aside>
-      <el-container>
-        <el-header class="common-layout-header">Header</el-header>
-        <el-main class="common-layout-main">
-
-          <div @click="getsda">GET Request</div>
-          <router-view />
-
-        </el-main>
+    <div class="common-layout">
+      <el-container style="height: 100vh;">
+        <el-aside width="210px" style="box-shadow: 8px 0px 10px #eee;z-index: 999;"><Aside /></el-aside>
+        <el-container>
+          <el-header style="padding: 0;height: 44px;"><Header /></el-header>
+          <el-main>
+            <router-view />
+          </el-main>
+        </el-container>
       </el-container>
-    </el-container>
-  </div>
+    </div>
 </template>
 
 <style scoped lang="less">
 .common-layout {
-  height: 100vh;
-
-  &-aside {
-    background-color: antiquewhite;
-  }
-
-  &-main {
-    background-color: #eee;
-  }
-
-  &-header {
-    background-color: aqua;
-  }
+  min-height: 100vh;
 }
 </style>
