@@ -1,10 +1,12 @@
 <script setup lang="ts">
 	import { reactive, ref } from "vue"
-	import { useRoute, useRouter} from "vue-router"
-	import { Login } from "../../../api/user"
-	import { ElNotification } from 'element-plus'
+	import { useRouter} from "vue-router"
 	import type { FormInstance, FormRules } from 'element-plus'
+
+	import useStore from '../../../store/index'
 	import { User, Lock } from '@element-plus/icons-vue'
+
+	const { userStore } = useStore()
 
 	const loginFormRef = ref<FormInstance>()
 	const router = useRouter();
@@ -22,36 +24,21 @@
 		password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
 	})
 
+	/**
+	 * 测试账号：huanglin admin123
+	 */
 	const submitForm = async (formEl: FormInstance | undefined) => {
 		if (!formEl) return
 		await formEl.validate((valid, fields) => {
 			if (valid) {
-				Login(loginForm).then(res => {
-					console.log(res)
-					if(res.status !== 2000) {
-						ElNotification({
-							title: '温馨提示',
-							message: '登录失败！',
-							type: 'error',
-						})
-					} else {
-						ElNotification({
-							title: '温馨提示',
-							message: '登录成功！',
-							type: 'success',
-						})
-						router.push('/')
 
-					}
-				}, fail => {
-					
+				userStore.$login(loginForm).then(() => {
+					router.push('/')
 				})
-			} else {
-				console.log('error submit!', fields)
+
 			}
 		})
 	}
-
 
 </script>
 
@@ -59,7 +46,7 @@
 	<div>
 		<div class="form-title">登 录</div>
 		<el-form
-			:ref="loginFormRef"
+			ref="loginFormRef"
 			:model="loginForm"
 			:rules="loginRules"
 			class="demo-loginForm"
@@ -81,7 +68,7 @@
 			</el-form-item>
 
 			<el-form-item>
-				<el-button style="width: 100%;" @click="submitForm(loginFormRef)">
+				<el-button style="width: 100%;" @click="() => submitForm(loginFormRef)">
 					登 录
 				</el-button>
 			</el-form-item>
