@@ -1,6 +1,6 @@
 <script setup lang="ts">
 	import { reactive, ref } from "vue"
-	import { useRouter} from "vue-router"
+	import { useRouter } from "vue-router"
 	import type { FormInstance, FormRules } from 'element-plus'
 
 	import useStore from '../../../store/index'
@@ -29,7 +29,7 @@
 	 */
 	const submitForm = async (formEl: FormInstance | undefined) => {
 		if (!formEl) return
-		await formEl.validate((valid, fields) => {
+		await formEl.validate((valid) => {
 			if (valid) {
 
 				userStore.$login(loginForm).then(() => {
