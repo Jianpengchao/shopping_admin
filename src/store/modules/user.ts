@@ -16,9 +16,10 @@ const useUserStore = defineStore('user', {
 
   actions: {
     $login(loginForm: ILogin) {
+			// eslint-disable-next-line no-async-promise-executor
 			return new Promise<void>(async (resolve, reject) => {
 				try {
-					const title: string = '温馨提示'
+					const title = '温馨提示'
 					const result = await Login(loginForm)
 
 					if (result.status !== 2000) {
