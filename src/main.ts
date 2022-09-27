@@ -13,7 +13,9 @@ import './style/index.css'
 const app = createApp(App)
 app.use(ElementPlus).use(router).use(createPinia()).mount('#app');
 
-// 图标
+
+// 图标组件
+// eslint-disable-next-line vue/multi-word-component-names
 app.component('Icon', ({ icon }: { icon: string }) => {
 	return createVNode(Icons[icon as keyof typeof Icons])
 })
