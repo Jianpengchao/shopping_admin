@@ -1,13 +1,18 @@
 /**
  * 基于 axios 封装的请求模块
  */
+
 import axios from "axios"
 
 // import router from '../router'
 // import { getToken, removeToken } from './auth'
 
+const url = import.meta.env.VITE_APP_BASE_URL
+
+const baseURL = import.meta.env.VITE_APP_DEV === 'development' ? `${url}/sapi` : url
+
 const server = axios.create({
-	baseURL: '/sapi', // 基本URL路径,
+	baseURL, // 基本URL路径,
 	timeout: 5000 // 设置请求超时，5秒
 })
 
