@@ -1,13 +1,13 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { ElNotification } from 'element-plus'
+import { ElNotification, } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 import { User, Lock } from '@element-plus/icons-vue'
-import { Register } from "../../../api/user"
+import { Register } from "@/api/user"
 import { ILogin } from '../types'
 
-const props = defineProps<{toggleMode: () => {}}>()
+const props = defineProps<{toggleMode: () => void}>()
 
 type IRegister = {
 	checkPass: string
@@ -15,8 +15,14 @@ type IRegister = {
 
 const registerFormRef = ref<FormInstance>()
 
+const registerForm = reactive<IRegister>({
+	username: '',	
+  password: '',
+  checkPass: '',
+})
 
-const validatePass = (rule: any, value: any, callback: any) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const validatePass = (value: string, callback: any) => {
   if (value === '') {
     callback(new Error('请输入密码'))
   } else {
@@ -27,7 +33,8 @@ const validatePass = (rule: any, value: any, callback: any) => {
     callback()
   }
 }
-const validatePass2 = (rule: any, value: any, callback: any) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const validatePass2 = (value: string, callback: any) => {
   if (value === '') {
     callback(new Error('请输入密码'))
   } else if (value !== registerForm.password) {
@@ -37,12 +44,6 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
   }
 }
 
-
-const registerForm = reactive<IRegister>({
-	username: '',	
-  password: '',
-  checkPass: '',
-})
 
 const rules = reactive({
 	username: [{ required: true, message: '请输入账号', trigger: 'blur' }],
@@ -58,7 +59,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
 				username: registerForm.username,
 				password: registerForm.password
 			}).then(res => {
-				console.log(res)
 				if (res.status === 2000) {
 					ElNotification({
 						title: '温馨提示',

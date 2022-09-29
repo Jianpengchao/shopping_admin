@@ -1,8 +1,8 @@
 <script setup lang="ts">
 	import { reactive } from 'vue'
 	import { useRoute } from 'vue-router'
-	import layoutRoutes from '../../routes/layoutRoutes'
-	import MenuItem from './MenuItem.vue';
+	import layoutRoutes from '@/routes/layoutRoutes'
+	import MenuItem from './MenuItem'
 
 	// 当前路由
 	const route = useRoute()

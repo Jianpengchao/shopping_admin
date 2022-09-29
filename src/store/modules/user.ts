@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import { ElNotification } from 'element-plus'
 
-import { Login } from '../../api/user'
-import { ILogin } from '../../views/login/types'
-import { setStorage, removeStorage } from '../../utils/authStorage'
-import { ACCESS_TOKEN } from '../../utils/constants'
+import { Login } from '@/api/user'
+import { ILogin } from '@/views/login/types'
+import { ACCESS_TOKEN } from '@/utils/constants'
+import { setStorage, removeStorage } from '@/utils/authStorage'
 
 const useUserStore = defineStore('user', {
   state: () => {

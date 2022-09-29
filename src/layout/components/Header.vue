@@ -1,7 +1,7 @@
 <script setup lang="ts">
 	import { ref } from 'vue'
 	import { useRouter } from "vue-router"
-	import useStore from '../../store'
+	import useStore from '@/store'
 	import { ElNotification } from 'element-plus'
 	
 	const { userStore } = useStore()

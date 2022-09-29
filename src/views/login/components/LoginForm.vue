@@ -3,7 +3,7 @@
 	import { useRouter } from "vue-router"
 	import type { FormInstance, FormRules } from 'element-plus'
 
-	import useStore from '../../../store/index'
+	import useStore from '@/store/index'
 	import { User, Lock } from '@element-plus/icons-vue'
 
 	const { userStore } = useStore()

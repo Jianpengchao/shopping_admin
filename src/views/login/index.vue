@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { markRaw, reactive, ref } from 'vue';
   
-  import LoginForm from "./components/LoginForm.vue";
-  import RegisterForm from "./components/RegisterForm.vue";
+  import LoginForm from './components/LoginForm.vue'
+  import RegisterForm from './components/RegisterForm.vue'
 
   let isLogin = ref<boolean>(true)
 
