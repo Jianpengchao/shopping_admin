@@ -52,7 +52,7 @@
 			class="demo-loginForm"
 		>
 			<el-form-item label="" prop="username">
-				<el-input v-model="loginForm.username" type="text" placeholder="请输入账号">
+				<el-input v-model="loginForm.username" type="text" @keyup.enter="() => submitForm(loginFormRef)" placeholder="请输入账号">
 					<template #prefix>
 						<el-icon class="el-input__icon"><User /></el-icon>
 					</template>
@@ -60,7 +60,7 @@
 			</el-form-item>
 
 			<el-form-item label="" prop="password">
-				<el-input v-model="loginForm.password" type="password" placeholder="请输入密码">
+				<el-input v-model="loginForm.password" type="password" @keyup.enter="() => submitForm(loginFormRef)" placeholder="请输入密码">
 					<template #prefix>
 						<el-icon class="el-input__icon"><Lock /></el-icon>
 					</template>

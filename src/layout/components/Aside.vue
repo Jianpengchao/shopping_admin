@@ -2,11 +2,11 @@
 	import { reactive } from 'vue'
 	import { useRoute } from 'vue-router'
 	import layoutRoutes from '@/routes/layoutRoutes'
-	import MenuItem from './MenuItem'
+	import MenuItem from './MenuItem.vue'
 
 	// 当前路由
 	const route = useRoute()
-	
+
 	// 菜单路由
 	const routes = reactive(layoutRoutes)
 

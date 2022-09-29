@@ -22,7 +22,7 @@ const registerForm = reactive<IRegister>({
 })
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const validatePass = (value: string, callback: any) => {
+const validatePass = (rule: any, value: any, callback: any) => {
   if (value === '') {
     callback(new Error('请输入密码'))
   } else {
@@ -34,7 +34,7 @@ const validatePass = (value: string, callback: any) => {
   }
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const validatePass2 = (value: string, callback: any) => {
+const validatePass2 = (rule: any, value: any, callback: any) => {
   if (value === '') {
     callback(new Error('请输入密码'))
   } else if (value !== registerForm.password) {

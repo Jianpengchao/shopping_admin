@@ -19,6 +19,10 @@ router.beforeEach((to, from, next) => {
 		} else {
 			return next('/login')
 		}
+	} else {
+		if (getStorage(ACCESS_TOKEN)) {
+			return next('/')
+		}
 	}
 	next()
 })
