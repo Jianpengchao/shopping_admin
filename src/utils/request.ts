@@ -9,7 +9,7 @@ import axios from "axios"
 
 const url = import.meta.env.VITE_APP_BASE_URL
 
-const baseURL = import.meta.env.VITE_APP_DEV === 'development' ? `${url}/sapi` : url
+const baseURL = import.meta.env.VITE_APP_DEV === 'development' ? `/sapi` : url
 
 const server = axios.create({
 	baseURL, // 基本URL路径,
