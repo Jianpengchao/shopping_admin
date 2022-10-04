@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ElNotification } from 'element-plus'
 
-import { Login } from '@/api/user'
+import { Login, GetUser } from '@/api/user'
 import { ILogin } from '@/views/login/types'
 import { ACCESS_TOKEN } from '@/utils/constants'
 import { setStorage, removeStorage } from '@/utils/authStorage'
@@ -9,13 +9,32 @@ import { setStorage, removeStorage } from '@/utils/authStorage'
 const useUserStore = defineStore('user', {
   state: () => {
     return {
+			role: '',
+			token: '',
+			email: '',
+			phone: '',
 			avatar: '',
+			wallet: '',
+			address: '',
+			nickname: '',
 			username: '',
-			token: ''
 		}
   },
 
   actions: {
+		async $getUser() {
+				try {
+					const result = await GetUser()
+
+					if (result.status === 2000) {
+
+						this.$patch(result.data)
+					}
+				}
+				catch (error) {
+					console.log((error as Error).message)
+				}
+		},
 		// 登录
     $login(loginForm: ILogin) {
 			// eslint-disable-next-line no-async-promise-executor
@@ -29,9 +48,6 @@ const useUserStore = defineStore('user', {
 						ElNotification({ title, message: (result as any).message, type: 'error', })
 
 					} else {
-
-						this.username = result.data.username
-						this.avatar = result.data.avatar
 						this.token = (result as any).token
 						setStorage(ACCESS_TOKEN, this.token)
 

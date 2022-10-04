@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref } from 'vue'
+	import { ref, onMounted } from 'vue'
 	import { useRouter } from "vue-router"
 	import useStore from '@/store'
 	import { ElNotification } from 'element-plus'
@@ -8,6 +8,10 @@
 	const circleUrl = ref('https://gimg2.baidu.com/image_search/src=http%3A%2F%2Finews.gtimg.com%2Fnewsapp_bt%2F0%2F9680744090%2F1000&refer=http%3A%2F%2Finews.gtimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1666881778&t=c6ea51246d22e3b30c87672b884fef74')
 	
 	const router = useRouter()
+
+	onMounted(() => {
+		userStore.$getUser()
+	})
 
 	const onLogout = async () => {
 		await userStore.$logout()
