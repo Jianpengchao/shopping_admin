@@ -14,3 +14,8 @@ export const Login = (form: ILogin) => server.post("/exemption/login", form)
  * @returns promise
  */
 export const Register = (form: ILogin) => server.post("/exemption/register", form)
+
+/**
+ * @GetUser 获取当前用户信息
+ */
+export const GetUser = () => server.get("/user/getuser")
