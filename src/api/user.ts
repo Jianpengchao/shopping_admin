@@ -19,3 +19,9 @@ export const Register = (form: ILogin) => server.post("/exemption/register", for
  * @GetUser 获取当前用户信息
  */
 export const GetUser = () => server.get("/user/getuser")
+
+/**
+ * @GetUsers 获取用户列表
+ * @returns 
+ */
+export const GetUsers = () => server.get("/user/getall")
