@@ -25,7 +25,7 @@ const layoutRoutes: RouteRecordRaw[] = [
 		path: '/marketmanage',
 		name: 'marketmanage',
 		component: Layout,
-		meta: { title: '市场管理', icon: 'Discount' },
+		meta: { title: '市场管理', icon: 'Connection' },
 		children: [
 			{
 				path: '/marketmanage/catemanage',
@@ -38,6 +38,26 @@ const layoutRoutes: RouteRecordRaw[] = [
 				name: 'goodsmanage',
 				component: () => import('../views/market/GoodsManage.vue'),
 				meta: { title: '商品管理' }
+			}
+		]
+	},
+	{
+		path: '/system',
+		name: 'system',
+		component: Layout,
+		meta: { title: '系统管理', icon: 'Setting' },
+		children: [
+			{
+				path: '/system/users',
+				name: 'users',
+				component: () => import('../views/system/Users.vue'),
+				meta: { title: '用户管理' }
+			},
+			{
+				path: '/system/menu',
+				name: 'menu',
+				component: () => import('../views/system/Menu.vue'),
+				meta: { title: '菜单管理' }
 			}
 		]
 	}

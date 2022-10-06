@@ -40,6 +40,10 @@ server.interceptors.request.use((config: AxiosRequestConfig) => {
 // 响应拦截，每次后端返回信息都会经过这里
 server.interceptors.response.use(response => {
 
+	if (response.data.status === 4000) {
+		ElMessage({message: response.data.message, type: 'error', center: true})
+	}
+
 	// 成功，去掉原本的data，返回真正的后端数据
 	return response.data
 
@@ -53,13 +57,13 @@ server.interceptors.response.use(response => {
 			router.replace({ path: '/login' })
 		}
 		else if (status >= 400 && status < 403) {
-			ElMessage.error('请求参数错误，请检查参数')
+			ElMessage({message: '请求参数错误，请检查参数！', type: 'error', center: true})
 		}
 		else if (status >= 403 && status < 500) {
-			ElMessage.error('没有操作权限')
+			ElMessage({message: '没有操作权限！', type: 'error', center: true})
 		}
 		else if (status >= 500) {
-			ElMessage.error('服务端内部异常，请稍后重试')
+			ElMessage({message: '服务端内部异常，请稍后重试！', type: 'error', center: true})
 		}
 
 		return Promise.reject(error)
