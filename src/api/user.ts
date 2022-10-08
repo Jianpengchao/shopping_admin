@@ -25,3 +25,6 @@ export const GetUser = () => server.get("/user/getuser")
  * @returns 
  */
 export const GetUsers = () => server.get("/user/getall")
+
+
+export const deleteUser = (id: number) => server.delete("/user/delete", { params: { id }})

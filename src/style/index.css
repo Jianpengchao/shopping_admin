@@ -4,3 +4,7 @@
   font-family: alimama;
   src: url("../assets/fonts/Alimama_ShuHeiTi_Bold.ttf")
 }
+
+.el-aside {
+  z-index: 10 !important;
+}
