@@ -1,15 +1,18 @@
 <script setup lang="ts">
   import { ref, reactive, onMounted } from 'vue'
-  import useStore from '@/store'
-  import { GetUsers } from '@/api/user'
+  import { ElMessage, ElMessageBox } from 'element-plus'
   import { Plus, Edit, Delete } from '@element-plus/icons-vue'
 
-  import { IRows } from './types';
+  import useStore from '@/store'
+  import { IRows } from './types'
+  import { GetUsers, deleteUser } from '@/api/user'
 
   const { userStore } = useStore()
 
   const input3 = ref('')
+  const drawer = ref(false)
   let data = reactive({
+    visible: false,
     tableData: []
   })
 
@@ -23,6 +26,34 @@
 
   const onEdit = (row: any) => {
     console.log(row.date)
+  }
+
+  const onDelete = (id: number): void => {
+    ElMessageBox.confirm(
+      '确定删除改用户吗？',
+      '温馨提示',
+      {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+    )
+    .then(() => {
+      deleteUser(id).then(() => {
+        ElMessage({ type: 'success', message: '删除成功！' })
+        fetchUsers()
+      },
+      () => {
+        ElMessage({ type: 'error', message: '删除失败！' })
+        }
+      )
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '已取消删除',
+      })
+    })
   }
   
   onMounted(() => {
@@ -72,7 +103,7 @@
 						v-for="row in rows"
 					>
             <template #default="scope" v-if="row.prop === 'username'">
-              <el-link type="primary">{{ scope.row[row.prop] }}</el-link>
+              <el-link type="primary" @click="drawer = true">{{ scope.row[row.prop] }}</el-link>
 						</template>
             <template #default="scope" v-else-if="row.prop === 'role'">
 							<el-tag class="ml-2" :type="scope.row[row.prop] === 'admin' ? '': 'info'">
@@ -101,12 +132,17 @@
                 type="danger"
                 :icon="Delete"
                 :disabled="userStore.role !== 'admin'"
+                @click="onDelete(scope.row.id)"
               >删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
 			</div>
 		</div>
+
+    <el-drawer v-model="drawer" title="用户信息">
+      <span>Hi there!</span>
+    </el-drawer>
 	</div>
 </template>
 
