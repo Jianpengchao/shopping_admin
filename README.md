@@ -1,16 +1,28 @@
-# Vue 3 + TypeScript + Vite
+# 黄超超市后台管理系统
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 开始
+```js
+// 克隆项目
+git clone https://github.com/Jianpengchao/shopping_admin.git
 
-## Recommended IDE Setup
+// 进入项目跟目录
+cd shopping_admin
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+// 安装依赖
+npm install
 
-## Type Support For `.vue` Imports in TS
+// 运行
+npm run dev
 
-Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
+// 打包
+npm run build
+```
+## 简介
+这是一个由[vernonin]("https://github.com/vernonin") 和 [Jianpengchao]("https://github.com/Jianpengchao") 共同开发的一个超超市后台管理系统。可对超市的商品进行增删改查的操作、对用户的权限等操作。
 
-1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
-2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
+## 技术栈
+> vue3、vue-router@4、typescript、pinia、element-plus、tailwindcss
 
-You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
+
+## 后端代码地址
+> [https://github.com/vernonin/shopping_serve.git]("https://github.com/vernonin/shopping_serve.git")
