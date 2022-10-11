@@ -41,6 +41,11 @@ server.interceptors.request.use((config: AxiosRequestConfig) => {
 server.interceptors.response.use(response => {
 
 	if (response.data.status === 4000) {
+		if (response.data.message === '非法请求！') {
+			router.replace({ path: '/login' })
+
+			removeStorage(ACCESS_TOKEN)
+		}
 		ElMessage({message: response.data.message, type: 'error', center: true})
 	}
 

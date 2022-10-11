@@ -1,61 +1,122 @@
 <script setup lang="ts">
-  import { ref, reactive, onMounted } from 'vue'
+  import { reactive, onMounted } from 'vue'
   import { ElMessage, ElMessageBox } from 'element-plus'
   import { Plus, Edit, Delete } from '@element-plus/icons-vue'
+  import AddUser from './components/AddUser.vue'
+  import UserInfo from './components/UserInfo.vue'
 
   import useStore from '@/store'
-  import { IRows } from './types'
-  import { GetUsers, deleteUser } from '@/api/user'
+  import { IRows, IUser, UserData } from './types'
+  import { GetUsers, DeleteUser, BatchDeleteUser } from '@/api/user'
 
   const { userStore } = useStore()
 
-  const input3 = ref('')
-  const drawer = ref(false)
-  let data = reactive({
-    visible: false,
-    tableData: []
-  })
+  let data = reactive(new UserData())
 
   const fetchUsers = async () => {
-    const result = await GetUsers()
+    try {
+      data.loading = true
+      const result = await GetUsers(data.keyword)
 
-    if (result.status === 2000) {
-      data.tableData = result.data
+      if (result.status === 2000) {
+        data.tableData = result.data
+      }
+
+      data.loading = false
+    }
+    catch {
+      data.loading = false
+    }
+    
+  }
+
+  const chnageSelect = (selection: IUser[]) => {
+    data.selected = selection
+  }
+
+  const onSearch = () => {
+    fetchUsers()
+  }
+
+  const onEdit = ({ id }: IUser) => {
+    data.oper = 'EDIT'
+    data.addVisible = true
+
+    const currUser = data.tableData.find(user => user.id === id)
+    data.currentUser = currUser as IUser
+  }
+
+  const onDelete = async (id: number): Promise<void> => {
+    try {
+      await ElMessageBox.confirm(
+        '确定删除改用户吗？',
+        '温馨提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      )
+
+      await DeleteUser(id)
+
+      fetchUsers()
+      ElMessage({ type: 'success', message: '删除成功！' })
+    }
+    catch (error){
+      if (error !== 'cancel') {
+        ElMessage({ type: 'error', message: '删除失败！' })
+      }
     }
   }
 
-  const onEdit = (row: any) => {
-    console.log(row.date)
-  }
+  const batchDelete = async (): Promise<void> => {
+    try {
+      const ids = data.selected.map(user => user.id)
 
-  const onDelete = (id: number): void => {
-    ElMessageBox.confirm(
-      '确定删除改用户吗？',
-      '温馨提示',
-      {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning',
+      if (ids.length < 1) {
+        throw new Error('请选择要删除的用户')
       }
-    )
-    .then(() => {
-      deleteUser(id).then(() => {
-        ElMessage({ type: 'success', message: '删除成功！' })
-        fetchUsers()
-      },
-      () => {
-        ElMessage({ type: 'error', message: '删除失败！' })
+
+      await ElMessageBox.confirm(
+        '确定删除改用户吗？',
+        '温馨提示',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
         }
       )
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: '已取消删除',
-      })
-    })
+
+      const result = await BatchDeleteUser(ids)
+
+      if (result.status === 2000) {
+        ElMessage.success('删除成功！')
+        fetchUsers()
+      } else {
+        throw new Error(result.msg)
+      }
+    }
+    catch(error) {
+      if (error !== 'cancel') {
+        ElMessage.info((error as Error).message)
+      }
+    }
   }
-  
+
+  const showUser = (user: IUser): void => {
+    data.currentUser = user
+    data.drawer = true    
+  }
+
+  // 添加 / 编辑用户成功的回调
+  const suCallback = (): void => {
+    ElMessage.success(`${data.oper === 'ADD' ? '添加' : '编辑'}用户成功！`)
+
+    fetchUsers()
+    data.addVisible = false
+  }
+
   onMounted(() => {
     fetchUsers()
   })
@@ -76,22 +137,42 @@
   <div class="overflow-hidden bg-white shadow sm:rounded-lg">
 		<div class="px-4 py-3 sm:px-6 flex" style="justify-content: space-between;">
 			<div class="flex-10">
-				<el-button :icon="Plus" link type="primary" text>增加</el-button>
-				<el-button :icon="Delete" link type="danger" text :disabled="userStore.role !== 'admin'">批量删除</el-button>
+				<el-button
+          :icon="Plus" link
+          type="primary" text
+          @click="data.addVisible = true; data.oper = 'ADD'"
+        >
+          增加
+        </el-button>
+				<el-button
+          :icon="Delete" link
+          type="danger" text
+          :disabled="userStore.role !== 'admin'"
+          @click="batchDelete"
+        >
+          批量删除
+        </el-button>
 			</div>
 			<el-input
-				v-model="input3"
+				v-model="data.keyword"
 				placeholder="请输入用户名称"
 				class="input-with-select"
+        @keyup.enter="onSearch"
 			>
 				<template #append>
-					<el-button>搜索</el-button>
+					<el-button @click="onSearch">搜索</el-button>
 				</template>
 			</el-input>
 		</div>
 		<div class="border-t border-gray-200">
 			<div class="px-4 py-2">
-				<el-table :data="data.tableData" style="width: 100%">
+				<el-table
+          :data="data.tableData"
+          highlight-current-row
+          v-loading="data.loading"
+          @selection-change="chnageSelect"
+          style="width: 100%"
+        >
 					<el-table-column type="selection" width="45" />
 
 					<el-table-column
@@ -103,13 +184,15 @@
 						v-for="row in rows"
 					>
             <template #default="scope" v-if="row.prop === 'username'">
-              <el-link type="primary" @click="drawer = true">{{ scope.row[row.prop] }}</el-link>
+              <el-link type="primary" @click="() => showUser(scope.row)">{{ scope.row[row.prop] }}</el-link>
 						</template>
+
             <template #default="scope" v-else-if="row.prop === 'role'">
 							<el-tag class="ml-2" :type="scope.row[row.prop] === 'admin' ? '': 'info'">
                 {{scope.row[row.prop] === 'admin' ? '管理员' : '普通用户'}}
               </el-tag>
 						</template>
+
 						<template #default="scope" v-else>
 							{{ scope.row[row.prop] }}
 						</template>
@@ -139,10 +222,14 @@
 				</el-table>
 			</div>
 		</div>
-
-    <el-drawer v-model="drawer" title="用户信息">
-      <span>Hi there!</span>
-    </el-drawer>
+    <UserInfo :visible="data.drawer" :info="data.currentUser" :close="() => data.drawer = false" />
+    <AddUser
+      :type="data.oper"
+      :visible="data.addVisible"
+      :user="data.currentUser"
+      :success="suCallback"
+      :close="() => data.addVisible = false"
+    />
 	</div>
 </template>
 

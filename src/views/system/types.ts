@@ -4,6 +4,17 @@ export interface IRows {
 	width?: string
 }
 
+export interface IAddUser {
+	id?: number
+	username: string
+	nickname: string
+	phone: string
+	password?: string
+	role: string
+	email: string
+	address: string
+}
+
 export interface IUser {
 	address: string | null
 	avatar: string | null
@@ -17,4 +28,15 @@ export interface IUser {
 	role: string | null
 	username: string | null
 	wallet: number | null
+}
+
+export class UserData {
+	keyword = ''
+	oper = 'add'
+	drawer = false
+	loading = false
+	addVisible = false
+	selected = [] as IUser[] | []
+	currentUser = {} as IUser
+	tableData: IUser[] | [] = []
 }

@@ -1,30 +1,55 @@
-import server from "../utils/request";
-import { ILogin } from "../views/login/types";
+import { IAddUser, IUser } from '@/views/system/types';
+import server from '../utils/request';
+import { ILogin } from '../views/login/types';
 
 /**
  * 登录
  * @param form usernaem: string, password：string
  * @returns promise 
  */
-export const Login = (form: ILogin) => server.post("/exemption/login", form)
+export const Login = (form: ILogin) => server.post('/exemption/login', form)
 
 /**
  * 注册
  * @param form usernaem: string, password：string
  * @returns promise
  */
-export const Register = (form: ILogin) => server.post("/exemption/register", form)
+export const Register = (form: ILogin) => server.post('/exemption/register', form)
 
 /**
- * @GetUser 获取当前用户信息
+ * 获取当前用户信息
  */
-export const GetUser = () => server.get("/user/getuser")
+export const GetUser = () => server.get<unknown, ResponseSuccess<IUser>>('/user/getuser')
 
 /**
- * @GetUsers 获取用户列表
+ * 获取用户列表
+ * @returns Promise IUser[]
+ */
+export const GetUsers = (search: string) => server.get<unknown, ResponseSuccess<IUser[]>>('/user/getall',{params: { search }})
+
+/**
+ * 添加用户
  * @returns 
  */
-export const GetUsers = () => server.get("/user/getall")
+export const AddUser = (userInfo: IAddUser) => server.post<unknown, ResponseSuccess<null>>('/user/add', userInfo)
 
+/**
+ * 修改用户信息
+ * @param userInfo IAddUser
+ * @returns 
+ */
+export const UpdateUser = (userInfo: IAddUser) => server.post('/user/update', userInfo)
 
-export const deleteUser = (id: number) => server.delete("/user/delete", { params: { id }})
+/**
+ * 删除用户
+ * @param id 用户id
+ * @returns 
+ */
+export const DeleteUser = (id: number) => server.delete<unknown, ResponseSuccess<null>>('/user/delete', { params: { id }})
+
+/**
+ * 批量删除用户
+ * @param ids number[]
+ * @returns 
+ */
+export const BatchDeleteUser = (ids: number[]) => server.delete<unknown, ResponseSuccess<null>>('/user/batchdelete', {data: { ids }})
