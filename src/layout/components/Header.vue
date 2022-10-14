@@ -29,7 +29,7 @@
 			<el-dropdown>
 				<span class="el-dropdown-link">
 					<el-avatar :size="24" :src="userStore.avatar || circleUrl" />
-					<span class="user-name">{{userStore.username}}</span>
+					<span class="user-name">{{userStore.nickname || userStore.username}}</span>
 				</span>
 				<template #dropdown>
 					<el-dropdown-menu>

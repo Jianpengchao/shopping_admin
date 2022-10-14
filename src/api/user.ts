@@ -2,6 +2,11 @@ import { IAddUser, IUser } from '@/views/system/types';
 import server from '../utils/request';
 import { ILogin } from '../views/login/types';
 
+interface ISParams {
+	key: string
+	search?: string
+}
+
 /**
  * 登录
  * @param form usernaem: string, password：string
@@ -25,7 +30,7 @@ export const GetUser = () => server.get<unknown, ResponseSuccess<IUser>>('/user/
  * 获取用户列表
  * @returns Promise IUser[]
  */
-export const GetUsers = (search: string) => server.get<unknown, ResponseSuccess<IUser[]>>('/user/getall',{params: { search }})
+export const GetUsers = (params: ISParams) => server.get<unknown, ResponseSuccess<IUser[]>>('/user/getall',{ params })
 
 /**
  * 添加用户

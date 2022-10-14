@@ -33,6 +33,7 @@ export interface IUser {
 export class UserData {
 	keyword = ''
 	oper = 'add'
+	keysearch = 'username'
 	drawer = false
 	loading = false
 	addVisible = false

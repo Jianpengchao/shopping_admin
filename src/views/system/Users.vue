@@ -16,7 +16,7 @@
   const fetchUsers = async () => {
     try {
       data.loading = true
-      const result = await GetUsers(data.keyword)
+      const result = await GetUsers({ key: data.keysearch, search: data.keyword })
 
       if (result.status === 2000) {
         data.tableData = result.data
@@ -122,7 +122,7 @@
   })
 
   const rows: IRows[] = [
-    {label: '用户名', prop: 'username', width: '140' },
+    {label: '账号', prop: 'username', width: '140' },
     {label: '昵称', prop: 'nickname', width: '140' },
     {label: '余额', prop: 'wallet', width: '140' },
     {label: '电话', prop: 'phone', width: '140' },
@@ -155,10 +155,19 @@
 			</div>
 			<el-input
 				v-model="data.keyword"
-				placeholder="请输入用户名称"
 				class="input-with-select"
+				:placeholder="
+        `请输入${data.keysearch === 'username'? '账号' : data.keysearch === 'nickname' ? '昵称' : '地址'}`
+        "
         @keyup.enter="onSearch"
 			>
+        <template #prepend>
+          <el-select v-model="data.keysearch" placeholder="Select" style="width: 80px">
+            <el-option label="账号" value="username" />
+            <el-option label="昵称" value="nickname" />
+            <el-option label="地址" value="address" />
+          </el-select>
+        </template>
 				<template #append>
 					<el-button @click="onSearch">搜索</el-button>
 				</template>
@@ -200,23 +209,25 @@
 
 					<el-table-column fixed="right" align="center" label="操作" width="130">
 						<template #default="scope">
-							<el-button
-                link
-                size="small"
+              <el-link
                 type="primary"
-                :icon="Edit"
+                :underline="false"
                 @click="onEdit(scope.row)"
                 :disabled="userStore.role !== 'admin'"
-							>编辑</el-button
-							>
-							<el-button
-                link
-                size="small"
+              >
+                <el-icon :size="12"><Edit /></el-icon>
+                编辑
+              </el-link>
+              <el-divider direction="vertical" />
+              <el-link
                 type="danger"
-                :icon="Delete"
-                :disabled="userStore.role !== 'admin'"
+                :underline="false"
                 @click="onDelete(scope.row.id)"
-              >删除</el-button>
+                :disabled="userStore.role !== 'admin'"
+              >
+                <el-icon :size="12"><Delete /></el-icon>
+                删除
+              </el-link>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -235,6 +246,6 @@
 
 <style lang="less" scoped>
 .input-with-select {
-	width: 280px;
+	width: 350px;
 }
 </style>
