@@ -4,9 +4,12 @@
   import type { FormInstance, FormRules } from 'element-plus'
   import { AddUser, UpdateUser } from '@/api/user'
   import { IUser } from '../types'
+  import useStore from '@/store'
+  
+  const { userStore } = useStore()
 
-  const userFormRef = ref<FormInstance>()
 	const formLabelWidth = '68px'
+  const userFormRef = ref<FormInstance>()
 
   const props = defineProps<{
     visible: boolean
@@ -15,6 +18,8 @@
     close: () => void
     success: () => void
   }>()
+
+  const isLoading = ref(false)
 
 	const form = reactive({
 		username: '',
@@ -55,6 +60,7 @@
   })
 
   const addUser = async () => {
+    isLoading.value = true
     try {
 
       if (props.type === 'ADD') {
@@ -76,6 +82,8 @@
     catch {
       ElMessage.error(`${props.type === 'ADD' ? '添加' : '编辑'}用户失败！`)
     }
+
+    isLoading.value = false
   }
 
   const submitForm = async (formEl: FormInstance | undefined) => {
@@ -136,7 +144,7 @@
           </el-form-item>
           <el-form-item label="角色：" :label-width="formLabelWidth" prop="role">
             <el-select v-model="form.role" style="width: 100%;" placeholder="请选择角色">
-              <el-option label="管理员" value="admin" />
+              <el-option label="管理员" value="admin" :disabled="userStore.role !== 'admin'" />
               <el-option label="普通用户" value="plain" />
             </el-select>
           </el-form-item>
@@ -149,7 +157,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="props.close">取 消</el-button>
-        <el-button @click="submitForm(userFormRef)">确 定</el-button>
+        <el-button :loading="isLoading" @click="submitForm(userFormRef)">确 定</el-button>
       </span>
     </template>
   </el-dialog>
