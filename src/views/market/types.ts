@@ -13,4 +13,7 @@ export interface ICate {
 
 export class CateState {
 	data: ICate[] = []
+	keyword = ''
+	keysearch = 'name'
+	selected: ICate[] = []
 }
