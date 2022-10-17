@@ -6,12 +6,12 @@
   import UserInfo from './components/UserInfo.vue'
 
   import useStore from '@/store'
-  import { IRows, IUser, UserData } from './types'
+  import { IRows, IUser, UserState } from './types'
   import { GetUsers, DeleteUser, BatchDeleteUser } from '@/api/user'
 
   const { userStore } = useStore()
 
-  let data = reactive(new UserData())
+  let data = reactive(new UserState())
 
   const fetchUsers = async () => {
     try {
@@ -216,7 +216,7 @@
                 :disabled="userStore.role !== 'admin'"
               >
                 <el-icon :size="12"><Edit /></el-icon>
-                编辑
+                &nbsp;编辑
               </el-link>
               <el-divider direction="vertical" />
               <el-link
@@ -226,7 +226,7 @@
                 :disabled="userStore.role !== 'admin'"
               >
                 <el-icon :size="12"><Delete /></el-icon>
-                删除
+                &nbsp;删除
               </el-link>
 						</template>
 					</el-table-column>
