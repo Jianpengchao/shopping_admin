@@ -30,7 +30,7 @@ export interface IUser {
 	wallet: number | null
 }
 
-export class UserData {
+export class UserState {
 	keyword = ''
 	oper = 'add'
 	keysearch = 'username'
