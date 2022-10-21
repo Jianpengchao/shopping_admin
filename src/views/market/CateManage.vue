@@ -4,19 +4,23 @@
   import { Plus, Edit, Delete } from '@element-plus/icons-vue'
 	
 	import { CateState, ICate } from './types';
+	import AddCate from './components/AddCate.vue'
 	import { GetCates, DeleteCate, BatchDelCate } from '@/api/catemanage';
+
 
 	const state = reactive(new CateState())
 
 	const fetchCates = async (): Promise<void> => {
-		let result = await GetCates()
+		let result = await GetCates({ key: state.keysearch, search: state.keyword })
 		
 		state.data = result.data
 	}
 
 	// 编辑
 	const onEdit = ({ id }: ICate): void => {
-		console.log(id)
+		state.oper = 'EDIT'
+		state.currentId = id
+		state.addVisible = true
 	}
 
 	// 删除
@@ -79,15 +83,21 @@
 		}
 	}
 
-	const onSearch = (): void => {
-		
-		console.log('搜索');
-		
+	const onAdd = () => {
+		state.oper = 'ADD'
+		state.addVisible = true
 	}
 
 	const chnageSelect = (selection: ICate[]) => {
     state.selected = selection
   }
+
+	const suCallback = () => {
+		fetchCates()
+		state.addVisible = false
+
+		ElMessage.success(`${state.oper === 'ADD' ? '添加' : '编辑'}商品分类成功！`)
+	}
 
 	onMounted(() => {
 		fetchCates()
@@ -104,14 +114,14 @@
 	<div class="overflow-hidden bg-white shadow sm:rounded-lg">
 		<div class="px-4 py-3 sm:px-6 flex" style="justify-content: space-between;">
 			<div class="flex-10">
-				<el-button :icon="Plus" link type="primary" text>
+				<el-button :icon="Plus" link type="primary" text @click="onAdd">
           增加
         </el-button>
 				<el-button :icon="Delete" link type="danger" text @click="batchDelete">
           批量删除
         </el-button>
 			</div>
-			<el-input v-model="state.keyword" class="input-with-select" @keyup.enter="onSearch">
+			<el-input v-model="state.keyword" class="input-with-select" @keyup.enter="fetchCates">
         <template #prepend>
           <el-select v-model="state.keysearch" placeholder="Select" style="width: 80px">
             <el-option label="名称" value="name" />
@@ -119,7 +129,7 @@
           </el-select>
         </template>
 				<template #append>
-					<el-button @click="onSearch">搜索</el-button>
+					<el-button @click="fetchCates">搜索</el-button>
 				</template>
 			</el-input>
 		</div>
@@ -177,6 +187,13 @@
 				</el-table>
 			</div>
 		</div>
+		<AddCate
+			:type="state.oper"
+			:visible="state.addVisible"
+			:current-id="state.currentId"
+			:success="suCallback"
+			:close="() => state.addVisible = false"
+		/>
 	</div>
 	
 </template>

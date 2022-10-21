@@ -14,6 +14,9 @@ export interface ICate {
 export class CateState {
 	data: ICate[] = []
 	keyword = ''
+	oper = 'ADD'
 	keysearch = 'name'
+	currentId: null | number = null
+	addVisible = false
 	selected: ICate[] = []
 }

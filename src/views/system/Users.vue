@@ -111,10 +111,10 @@
 
   // 添加 / 编辑用户成功的回调
   const suCallback = (): void => {
-    ElMessage.success(`${data.oper === 'ADD' ? '添加' : '编辑'}用户成功！`)
-
     fetchUsers()
     data.addVisible = false
+
+    ElMessage.success(`${data.oper === 'ADD' ? '添加' : '编辑'}用户成功！`)
   }
 
   onMounted(() => {

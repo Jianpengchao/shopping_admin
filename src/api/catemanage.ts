@@ -1,25 +1,30 @@
 import server from '../utils/request'
 import { ICate } from '@/views/market/types'
 
+interface ISParams {
+	key: string
+	search?: string
+}
+
 /**
  * 获取所有商品分类
  * @returns 
  */
-export const GetCates = () => server.get<unknown, ResponseSuccess<ICate[]>>('/goodscate/getall')
+export const GetCates = (params: ISParams) => server.get<unknown, ResponseSuccess<ICate[]>>('/goodscate/getall', { params })
 
 /**
  * 获取单个商品分类
  * @param id 商品分类ID
  * @returns 
  */
-export const GetCate = (id: number) => server.get<unknown, ResponseSuccess<ICate[]>>('/goodscate/getsingle', { params: { id }})
+export const GetCate = (id: number) => server.get<unknown, ResponseSuccess<ICate>>('/goodscate/getsingle', { params: { id }})
 
 /**
  * 添加商品分类
  * @param data 
  * @returns 
  */
-export const AddCate = (data: {name: string, alias: string}) => server.post<unknown, ResponseSuccess<null>>('/goodscate/add', data)
+export const AddCate = (data: {name: string, alias: string, status: number}) => server.post<unknown, ResponseSuccess<null>>('/goodscate/add', data)
 
 /**
  * 修改商品分类
