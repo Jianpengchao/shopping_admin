@@ -22,7 +22,6 @@
 </template>
 
 <style lang="less" scoped>
-
 .el-menu .el-menu--inline .is-active {
 	border-right: 2px solid #409eff !important;
 }
