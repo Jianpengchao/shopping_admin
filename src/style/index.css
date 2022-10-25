@@ -16,3 +16,19 @@
 .el-menu {
   border: none !important;
 }
+
+.el-tabs__header {
+  margin: 0 !important;
+  border: none !important;
+}
+.el-tabs__item {
+  font-size: 12px !important;
+  height: 30px !important;
+  line-height: 30px !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+  border-radius: 0 !important;
+}
+.el-tabs__header .is-active {
+  background-color: rgb(239 246 255 / 1);
+}

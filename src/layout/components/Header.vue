@@ -63,7 +63,7 @@
 	padding: 0 20px;
 	box-sizing: border-box;
 	background-color: #fff;
-	border-bottom: 2px solid #eee;
+	border-bottom: 1px solid #eee;
 
 	display: flex;
 	justify-content: space-between;
