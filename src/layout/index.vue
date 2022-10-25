@@ -1,7 +1,8 @@
 <script lang="ts" setup>
   import useStore from '@/store'
   import Aside from './components/Aside.vue'
-  import Header from './components/Header.vue';
+  import Header from './components/Header.vue'
+  import NavTabs from './components/NavTabs.vue'
 
   const { globalStore } =useStore()
 </script>
@@ -12,6 +13,7 @@
         <el-aside :width="globalStore.menuCollapse ? '64px' : '210px'" class="common-layout-aside"><Aside /></el-aside>
         <el-container>
           <el-header style="padding: 0;height: 44px;"><Header /></el-header>
+          <NavTabs />
           <el-main class="common-layout-main">
             <router-view />
           </el-main>
